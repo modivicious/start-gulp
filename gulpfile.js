@@ -40,9 +40,9 @@ export const styles = () => {
 }
 
 export const scripts = () => {
-  return gulp.src(["app/js/index.js"])
+  return gulp.src(["app/src/index.js"])
     .pipe(concat("index.min.js"))
-    .pipe(gulp.dest("app/js"))
+    .pipe(gulp.dest("app/src"))
     .pipe(browserSync.stream());
 }
 
@@ -59,7 +59,7 @@ export const cssMin = () => {
 }
 
 export const jsMin = () => {
-  return gulp.src("app/js/index.min.js")
+  return gulp.src("app/src/index.min.js")
     .pipe(uglify())
     .pipe(gulp.dest("dist/js"));
 }
@@ -115,8 +115,12 @@ export const sprite = () => {
     .pipe(gulp.dest("app/images"));
 }
 
+export const buildFonts = () => {
+  return gulp.src("app/fonts/*").pipe(gulp.dest("dist/fonts"));
+}
+
 export const buildOther = () => {
-  return gulp.src(["app/fonts/*", "app/**/manifest.json"]).pipe(gulp.dest("dist"));
+  return gulp.src(["app/**/manifest.json"]).pipe(gulp.dest("dist"));
 }
 
 export const cleanDist = () => {
@@ -131,11 +135,11 @@ export const zipArchive = () => {
 
 export const watching = () => {
   gulp.watch(["app/scss/**/*.scss"], styles);
-  gulp.watch(["app/js/**/*.js", "!app/js/index.min.js"], scripts);
+  gulp.watch(["app/src/**/*.js", "!app/src/index.min.js"], scripts);
   gulp.watch("app/images/**/*.{jpg,jpeg,png}").on("add", webp);
   gulp.watch(["app/**/*.html"]).on("change", browserSync.reload);
 }
 
-export const build = gulp.series(cleanDist, gulp.parallel(htmlMin, cssMin, jsMin, buildOther, imagesMin), zipArchive);
+export const build = gulp.series(cleanDist, gulp.parallel(htmlMin, cssMin, jsMin, buildFonts, buildOther, imagesMin), zipArchive);
 
 export default gulp.parallel(styles, scripts, browsersync, watching);
