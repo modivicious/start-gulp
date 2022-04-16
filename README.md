@@ -1,2 +1,2 @@
 # start-gulp
-My current start gulp project. The first version is in the snippets repository in the start folder.
+My current gulp starter. The first version is [here](https://github.com/modivicious/snippets/tree/main/start).
